@@ -1,0 +1,10 @@
+#Værmelding for de neste 9 dagene Oslo
+#https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=59.5445&lon=10.4445
+
+#luft kvalitet
+#https://api.met.no/weatherapi/airqualityforecast/0.1/documentation 
+
+#SSB FÅR FAKTISK LASTET NED CVS
+#https://seklima.met.no/observations/
+
+#Har nå samlet inn data fra Blindern, nedbør, temperatur og vind
