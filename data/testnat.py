@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 # Define the correct path
-file_path = os.path.join("data", "Oslo-blindern.csv")  # Replace with the actual CSV file name
+file_path = os.path.join("data", "blindern.csv")  # Replace with the actual CSV file name
 
 
 
