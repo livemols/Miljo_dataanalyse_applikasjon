@@ -38,7 +38,15 @@ for i in range(1,13):
                 dager+=1
                 month=df["Tid"][k].month
             except ValueError:
-                pass
+                maxtemp+=df["Makstemp"][k]
+                mintemp+=df["Mintemp"][k]
+                rain+=df["Nedbør"][k]
+                wind+=df["Vind"][k]
+                
+
+
+                dager+=1
+                
     if 0<dager:   
         avr_maxtemp=float(maxtemp/dager)
         avr_mintemp=float(mintemp/dager)
@@ -53,10 +61,10 @@ for i in range(1,13):
     mande = [month,round(avr_maxtemp, 2), round(avr_mintemp, 2), round(avr_rain, 2), round(avr_wind, 2), round(avr_snow, 2)]
     gjennomsnitt.append(mande)
 
-header=["Månde","Maksimumtemperatur", "Minimumtemperatur", "Nedbør(døgn)", "Høyest middelvind", "Snødybde(cm)"]
+header=["Måned","Maksimumtemperatur", "Minimumtemperatur", "Nedbør(døgn)", "Høyest middelvind", "Snødybde(cm)"]
             
 print(tabulate(gjennomsnitt, headers=header,tablefmt="fancy_grid"))
 
-
+#print(df)
 
 
