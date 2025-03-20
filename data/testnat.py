@@ -30,7 +30,7 @@ for i in range(1,13):
             try:
                 maxtemp+=df["Makstemp"][k]
                 mintemp+=df["Mintemp"][k]
-                rain+=df["Nedbør"][k]
+                rain+=df["Nedbør"][k] 
                 wind+=df["Vind"][k]
                 snow+=float(df["Snø"][k])
 
