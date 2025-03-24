@@ -2,12 +2,16 @@
 import pandas as pd
 import os
 
-# Get the directory where the script is located
-script_dir = os.path.dirname(os.path.abspath(__file__))
+# Finn absolutt sti til data-mappen
+current_dir = os.path.dirname(os.path.abspath(__file__))  # Finner mappen der testnat.py er
+data_path = os.path.join(current_dir, "..", "data")  # Går én mappe opp, deretter inn i data/
 
-# Define the file paths for original and modified CSV
-original_file = os.path.join(script_dir, "blindern.csv")  
-modified_file = os.path.join(script_dir, "blindern_behandlet.csv")  
+# Spesifiser filnavnet
+filename = "blindern.csv"  
+
+# Lag full sti til filen
+original_file = os.path.join(data_path, filename)
+modified_file = os.path.join(data_path, "blindern_behandlet.csv")  
 
 # Read the original CSV file
 df = pd.read_csv(original_file, delimiter=";")

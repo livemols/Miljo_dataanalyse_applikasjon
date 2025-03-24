@@ -5,11 +5,15 @@ from tabulate import tabulate
 from datetime import datetime
 
 
+# Finn absolutt sti til data-mappen
+current_dir = os.path.dirname(os.path.abspath(__file__))  # Finner mappen der testnat.py er
+data_path = os.path.join(current_dir, "..", "data")  # Går én mappe opp, deretter inn i data/
 
+# Spesifiser filnavnet
+filename = "blindern.csv"  
 
-
-# Manuelt setter file-path til blindern.csv
-file_path = r"C:\Users\Tai khoan chung\OneDrive - NTNU\Anvendt prog\Mappe innlevering\Miljo_dataanalyse_applikasjon\data\blindern.csv"
+# Lag full sti til filen
+file_path = os.path.join(data_path, filename)
 
 
 # sorterer data etter ";"
