@@ -1,6 +1,8 @@
 #Denne filen renser og behandler dataen vår
 import pandas as pd
 import os
+import numpy as np
+import numpy.ma as ma
 
 # Finn absolutt sti til data-mappen
 current_dir = os.path.dirname(os.path.abspath(__file__))  # Finner mappen der testnat.py er
@@ -14,14 +16,29 @@ original_file = os.path.join(data_path, filename)
 modified_file = os.path.join(data_path, "blindern_behandlet.csv")  
 
 # Read the original CSV file
-df = pd.read_csv(original_file, delimiter=";")
+df = pd.read_csv(original_file,skipfooter=1, engine='python',delimiter=";")
 
-# Apply modifications
+# Endrer navn på kolonnene for bedre oversikt og gjorde om dato til datetime format
 df.columns = ["Navn", "Stasjon", "Tid", "Makstemp", "Mintemp", "Nedbør", "Vind", "Snø"]
 df["Tid"] = pd.to_datetime(df["Tid"], format="%d.%m.%Y")
 
-# Save the modified DataFrame as a new CSV file in the same folder
-df.to_csv(modified_file, index=False, sep=";")  # Keep the same delimiter (;)
 
-print(f"Modified CSV file saved as: {modified_file}")
+# lagrer DataFrame til ny cvs fil i samme mappe
+df.to_csv(modified_file, index=False, sep=";")  # Holder den samme delimiter (;)
+
+#Behandler manglende data ved interpolate
+#Siden "Snø"-kolonne inneholder noen ikke-målte verdier "-", blir disse verdiene bytte om til NaN for manglende data behandling
+df['Snø'] = pd.to_numeric(df['Snø'], errors='coerce') 
+
+#endrer NaN til en mellom verdi av de 
+df.interpolate(method='linear', inplace=True)
+
+
+
+
+
+
+print(df['Tid'].dtype)
+
+#print(f"Modified CSV file saved as: {modified_file}")
 
