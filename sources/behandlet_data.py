@@ -20,6 +20,9 @@ df = pd.read_csv(original_file, delimiter=";")
 df.columns = ["Navn", "Stasjon", "Tid", "Makstemp", "Mintemp", "Nedbør", "Vind", "Snø"]
 df["Tid"] = pd.to_datetime(df["Tid"], format="%d.%m.%Y")
 
+#Delete duplitcates (rows)
+df.drop_duplicates(inplace = True)
+
 # Save the modified DataFrame as a new CSV file in the same folder
 df.to_csv(modified_file, index=False, sep=";")  # Keep the same delimiter (;)
 
