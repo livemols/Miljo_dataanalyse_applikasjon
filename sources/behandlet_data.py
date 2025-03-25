@@ -23,8 +23,7 @@ df.columns = ["Navn", "Stasjon", "Tid", "Makstemp", "Mintemp", "Nedbør", "Vind"
 df["Tid"] = pd.to_datetime(df["Tid"], format="%d.%m.%Y")
 
 
-# lagrer DataFrame til ny cvs fil i samme mappe
-df.to_csv(modified_file, index=False, sep=";")  # Holder den samme delimiter (;)
+
 
 #Behandler manglende data ved interpolate
 #Siden "Snø"-kolonne inneholder noen ikke-målte verdier "-", blir disse verdiene bytte om til NaN for manglende data behandling
@@ -33,12 +32,13 @@ df['Snø'] = pd.to_numeric(df['Snø'], errors='coerce')
 #endrer NaN til en mellom verdi av de 
 df.interpolate(method='linear', inplace=True)
 
+# lagrer DataFrame til ny cvs fil i samme mappe
+df.to_csv(modified_file, index=False, sep=";")  # Holder den samme delimiter (;)
 
 
 
 
 
-print(df['Tid'].dtype)
 
-#print(f"Modified CSV file saved as: {modified_file}")
+print(f"Modified CSV file saved as: {modified_file}")
 

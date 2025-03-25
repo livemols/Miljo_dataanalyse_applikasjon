@@ -5,6 +5,7 @@ from tabulate import tabulate
 from datetime import datetime
 
 
+
 # Finn absolutt sti til data-mappen
 current_dir = os.path.dirname(os.path.abspath(__file__))  # Finner mappen der testnat.py er
 data_path = os.path.join(current_dir, "..", "data")  # Går én mappe opp, deretter inn i data/
@@ -17,29 +18,24 @@ file_path = os.path.join(data_path, filename)
 
 
 # sorterer data etter ";"
-df = pd.read_csv(file_path,delimiter=";")
+df = pd.read_csv(file_path,delimiter=";",parse_dates=['Tid'])
 
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 os.chdir(script_dir)
-print(df['Tid'].dtype)
+
+print(df)
 
 #behandler blindern.cvs
 
 # Adderer en ny kolonne for månde
-#df['Month'] = df['Tid'].dt.month
-
+df['Month'] = df['Tid'].dt.month
 
 # Sorterer etter månde og regne ut gjennomsnitt for alle kolonne
-#monthly_means = df.groupby('Month').mean(numeric_only=True)
-
-#print(monthly_means)
+monthly_means = df.groupby('Month').mean(numeric_only=True)
 
 
 
-
-
-
-
+print(tabulate(monthly_means, tablefmt="fancy_grid",headers=["Månde", "Maxtemp", "Mintemp", "Nedbør","Vind", "Snø", ]))
