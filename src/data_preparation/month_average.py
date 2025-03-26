@@ -3,12 +3,13 @@ import os
 import sys
 from tabulate import tabulate
 from datetime import datetime
+import matplotlib.pyplot as plt
 
 
 
 # Finn absolutt sti til data-mappen
 current_dir = os.path.dirname(os.path.abspath(__file__))  # Finner mappen der testnat.py er
-data_path = os.path.join(current_dir, "..", "data")  # Går én mappe opp, deretter inn i data/
+data_path = os.path.join(current_dir, "..", "..", "data")  # Går én mappe opp, deretter inn i data/
 
 # Spesifiser filnavnet
 filename = "blindern_behandlet.csv"  
@@ -33,10 +34,12 @@ print(df)
 # Adderer en ny kolonne for månde
 df['Month'] = df['Tid'].dt.month
 
+
 # Sorterer etter månde og regne ut gjennomsnitt for alle kolonne
 monthly_means = df.groupby('Month').mean(numeric_only=True)
 
 
 
 print(tabulate(monthly_means, tablefmt="fancy_grid",headers=["Månde", "Maxtemp", "Mintemp", "Nedbør","Vind", "Snø", ]))
-print(monthly_means.plot(kind="bar", title="Gjennomsnittlig målinger"))
+monthly_means.plot(kind="bar", title="Gjennomsnittlig målinger")
+plt.show()

@@ -6,7 +6,7 @@ import numpy.ma as ma
 
 # Finn absolutt sti til data-mappen
 current_dir = os.path.dirname(os.path.abspath(__file__))  # Finner mappen der testnat.py er
-data_path = os.path.join(current_dir, "..", "data")  # Går én mappe opp, deretter inn i data/
+data_path = os.path.join(current_dir, "..","..", "data")  # Går én mappe opp, deretter inn i data/
 
 # Spesifiser filnavnet
 filename = "blindern.csv"  
