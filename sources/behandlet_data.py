@@ -15,7 +15,7 @@ filename = "blindern.csv"
 original_file = os.path.join(data_path, filename)
 modified_file = os.path.join(data_path, "blindern_behandlet.csv")  
 
-# Read the original CSV file
+# leser rådata
 df = pd.read_csv(original_file,skipfooter=1, engine='python',delimiter=";")
 
 # Endrer navn på kolonnene for bedre oversikt og gjorde om dato til datetime format

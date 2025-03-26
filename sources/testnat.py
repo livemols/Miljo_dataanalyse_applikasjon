@@ -17,7 +17,7 @@ filename = "blindern_behandlet.csv"
 file_path = os.path.join(data_path, filename)
 
 
-# sorterer data etter ";"
+# sorterer data etter ";" og gjør om "Tid" kolonne til datetime format
 df = pd.read_csv(file_path,delimiter=";",parse_dates=['Tid'])
 
 
@@ -28,7 +28,7 @@ os.chdir(script_dir)
 
 print(df)
 
-#behandler blindern.cvs
+
 
 # Adderer en ny kolonne for månde
 df['Month'] = df['Tid'].dt.month
@@ -39,3 +39,4 @@ monthly_means = df.groupby('Month').mean(numeric_only=True)
 
 
 print(tabulate(monthly_means, tablefmt="fancy_grid",headers=["Månde", "Maxtemp", "Mintemp", "Nedbør","Vind", "Snø", ]))
+print(monthly_means.plot(kind="bar", title="Gjennomsnittlig målinger"))
