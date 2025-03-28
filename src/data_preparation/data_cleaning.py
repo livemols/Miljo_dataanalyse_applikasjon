@@ -9,7 +9,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))  # Finner mappen der te
 data_path = os.path.join(current_dir, "..","..", "data")  # Går én mappe opp, deretter inn i data/
 
 # Spesifiser filnavnet
-filename = "blindern.csv"  
+filename = "blindern_skitten.csv"  
 
 # Lag full sti til filen
 original_file = os.path.join(data_path, filename)
@@ -26,11 +26,11 @@ df["Tid"] = pd.to_datetime(df["Tid"], format="%d.%m.%Y")
 
 
 #Behandler manglende data ved interpolate
-#Siden "Snø"-kolonne inneholder noen ikke-målte verdier "-", blir disse verdiene bytte om til NaN for manglende data behandling
-df['Snø'] = pd.to_numeric(df['Snø'], errors='coerce') 
+#Endrer alle mising value "-" til Nan og deretter bruker interpolate
+df = df.replace("-", np.nan) 
 
-#endrer NaN til en mellom verdi av de 
 df.interpolate(method='linear', inplace=True)
+df=df.round(1)
 
 # lagrer DataFrame til ny cvs fil i samme mappe
 df.to_csv(modified_file, index=False, sep=";")  # Holder den samme delimiter (;)
