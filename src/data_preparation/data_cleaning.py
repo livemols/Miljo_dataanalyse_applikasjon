@@ -1,4 +1,4 @@
-#Denne filen lager klassen data_cleaning som brukes til å rense data
+#This file make the class data_cleaning for cleaning data
 
 import pandas as pd
 import numpy as np
