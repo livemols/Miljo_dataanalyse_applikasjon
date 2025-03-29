@@ -2,7 +2,7 @@
 import pandas as pd
 import os
 import numpy as np
-import numpy.ma as ma
+
 
 # Finn absolutt sti til data-mappen
 current_dir = os.path.dirname(os.path.abspath(__file__))  # Finner mappen der testnat.py er
