@@ -15,7 +15,7 @@ filename = "blindern.csv"
 
 # Lag full sti til filen
 original_file = os.path.join(data_path, filename)
-modified_file = os.path.join(data_path, "blindern_skitten.csv")  
+modified_file = os.path.join(data_path, "blindern_dirty_data_generator.csv")  
 
 # leser rådata
 df = pd.read_csv(original_file,skipfooter=1, engine='python',delimiter=";")
