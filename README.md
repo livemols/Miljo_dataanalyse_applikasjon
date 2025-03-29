@@ -5,7 +5,6 @@
  - Intro
  - Data
  - Kildekritikk
- - 
 
 ## Intro
 Oppgaven går ut på å utvikle et program som henter, analyserer og visulariserer værdata. Da kan man få innsikt i værmønstre og kan identifisere fremtidige værmønster. I del 1 skal man sortere, rense og forberede datasettet til videre utvikling. Mens i del 2 skal man analysere og visualisere datasettet. 
@@ -24,9 +23,6 @@ Linken til nettsiden er :https://seklima.met.no/observations/
 Værdataen vi har hentet fra KSS er originalt fra Metreologisk institutt.
 
 Vi valgte å samle data fra Blindern værsenter siden de hadde for det meste fullstendig data. 
-
-
-Datasettet vårt som ble hentet fra KSS hadde få feil. Den største feilen var at noen av snødybdeværdiene ikke var målt i sommermånedene. Man kan lett konkludere med at hvis snødybden hadde blitt målt ville dybden være 0cm, men for å gjøre programmet uavhenngig av gode data måtte vi gjøre om på det. Ved å bruke interpolate fant vi mulige verdier for manglende data. 
 
 
 
