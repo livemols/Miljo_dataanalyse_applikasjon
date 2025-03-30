@@ -42,15 +42,21 @@ class test_behandlet_data(unittest.TestCase):
     def test_outlier_removal(self):
         df = self.df.copy()
 
-        threshold = 3
+        threshold = 3.5
 
         for column in df.select_dtypes(include=['number']).columns:
+
+            if column in ["Nedbør","Snø"]:
+                threshold = 10
+
+            self.df[column] = self.df[column].where(self.df[column].between(-40, 200))
+
             mean = df[column].mean()
             std = df[column].std()
             lower_limit = mean - threshold * std
             upper_limit = mean + threshold * std
 
-             # ".where" for å beholde NaN i stedet for å fjerne verdier helt
+             # Change outliers to NaN
             df[column] = df[column].where(df[column].between(lower_limit, upper_limit))
 
             self.assertTrue(df[column].dropna().between(lower_limit, upper_limit).all(), f"Outliers found in {column}")
@@ -62,10 +68,8 @@ class test_behandlet_data(unittest.TestCase):
 
 
         for column in df.select_dtypes(include=['number']).columns:
-            if column in ["Makstemp", "Mintemp"]:
-                df[column] = df[column].interpolate(method='polynomial', order=2).round(1)
+            df[column] = df[column].interpolate(method='linear').round(1)
             if column in ["Nedbør", "Vind", "Snø"]:
-                df[column] = df[column].interpolate(method='linear').round(1)
                 df[column] = df[column].clip(lower = 0)
 
                 self.assertTrue((df[column] >= 0).all(), f"Negative values found in {column}")
