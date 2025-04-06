@@ -27,8 +27,8 @@ wind_df.drop(columns=columns_to_drop, inplace=True)
 merged_df=pd.merge(weather_df,wind_df,on="Tid(norsk normaltid)")
 
 #Make a new file and put in into the data folder
-merged_file_path=os.path.join(data_path,"merged.csv")
-merged_df.to_csv(merged_file_path,index=False)
+merged_file_path=os.path.join(data_path,"blindern.csv")
+merged_df.to_csv(merged_file_path,index=False,sep=";")
 
 
 
