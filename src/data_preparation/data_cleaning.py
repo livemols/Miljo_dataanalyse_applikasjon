@@ -10,11 +10,11 @@ class DataCleaning:
 
     def form(self):
         # Change the headers of the columm for better overview, and change the date to datetime format
-        self.df.columns = ["Navn", "Stasjon", "Tid", "Makstemp", "Mintemp", "Nedbør", "Vind", "Snø"]
+        self.df.columns = ["Navn", "Stasjon", "Tid", "Makstemp", "Mintemp", "Middeltemp","Snø","Nedbør","Middelvind" ,"Høye vindkast"]
         self.df["Tid"] = pd.to_datetime(self.df["Tid"], format="%d.%m.%Y")
 
         # Convert columns to numeric
-        numeric_columns = ["Makstemp", "Mintemp", "Nedbør", "Vind", "Snø"]
+        numeric_columns = ["Makstemp", "Mintemp","Middeltemp", "Snø", "Nedbør", "Middelvind", "Høye vindkast"]
         self.df[numeric_columns] = self.df[numeric_columns].apply(pd.to_numeric, errors='coerce')
     
         return self
@@ -38,7 +38,7 @@ class DataCleaning:
 
         for column in self.df.select_dtypes(include=['number']).columns:
             
-            if column in ["Nedbør","Snø"]:
+            if column in ["Snø","Nedbør"]:
                 threshold = 10
 
             self.df[column] = self.df[column].where(self.df[column].between(-40, 200))
@@ -58,7 +58,7 @@ class DataCleaning:
         
         for column in self.df.select_dtypes(include=['number']).columns:
             self.df[column] = self.df[column].interpolate(method='linear').round(1)
-            if column in ["Nedbør", "Vind", "Snø"]:
+            if column in ["Snø", "Nedbør", "Middelvind","Høye vindkast"]:
                 self.df[column] = self.df[column].clip(lower = 0)
         
         return self
