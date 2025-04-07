@@ -13,14 +13,16 @@ class test_behandlet_data(unittest.TestCase):
         self.df = pd.DataFrame({
             "Navn": ["Oslo","Oslo","Oslo","Oslo"],
             "Stasjon": ["SN18700","SN18700","SN18700","SN18700"],
-            "Tid": ["21.02.2025","22.02.2025","22.02.2025","22.02.2025"],
+            "Tid": ["21.02.2025","22.02.2025","22.02.2025","23.02.2025"],
             "Makstemp": [7,8,8,500],
             "Mintemp": [3,4,4,-200],
-            "Nedbør": [0,1,1,2],
-            "Vind": [4,2,2,np.nan],
+            "Middeltemp": [5,6,6,7],
             "Snø": [0.3,0.5,0.5,np.nan],
+            "Nedbør": [0,1,1,2],
+            "Middelvind": [4,2,2,np.nan],
+            "Høye vindkast": [7,5,5,8],
         })
-        self.forventede_kolonner = ["Navn","Stasjon","Tid","Makstemp","Mintemp","Nedbør","Vind","Snø"]
+        self.forventede_kolonner = ["Navn","Stasjon","Tid","Makstemp","Mintemp","Middeltemp","Snø","Nedbør","Middelvind","Høye vindkast"]
 
         #ser at navnet til kolonnene blir korrekt
     def test_navnendring_kolonner(self):
@@ -46,7 +48,7 @@ class test_behandlet_data(unittest.TestCase):
 
         for column in df.select_dtypes(include=['number']).columns:
 
-            if column in ["Nedbør","Snø"]:
+            if column in ["Snø","Nedbør"]:
                 threshold = 10
 
             self.df[column] = self.df[column].where(self.df[column].between(-40, 200))
@@ -69,7 +71,7 @@ class test_behandlet_data(unittest.TestCase):
 
         for column in df.select_dtypes(include=['number']).columns:
             df[column] = df[column].interpolate(method='linear').round(1)
-            if column in ["Nedbør", "Vind", "Snø"]:
+            if column in ["Snø", "Nedbør", "Middelvind","Høye vindkast"]:
                 df[column] = df[column].clip(lower = 0)
 
                 self.assertTrue((df[column] >= 0).all(), f"Negative values found in {column}")
