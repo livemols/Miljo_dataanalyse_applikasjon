@@ -40,6 +40,6 @@ monthly_means = df.groupby('Month').mean(numeric_only=True)
 
 
 
-print(tabulate(monthly_means, tablefmt="fancy_grid",headers=["Månde", "Maxtemp", "Mintemp", "Nedbør","Vind", "Snø", ]))
+print(tabulate(monthly_means, tablefmt="fancy_grid",headers=["Måned","Makstemp","Mintemp","Middeltemp","Snø","Nedbør","Snø", ]))
 monthly_means.plot(kind="bar", title="Gjennomsnittlig målinger")
 plt.show()
