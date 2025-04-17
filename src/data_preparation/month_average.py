@@ -35,6 +35,7 @@ print(df)
 df['Month'] = df['Tid'].dt.month
 
 
+
 # Sorterer etter månde og regne ut gjennomsnitt for alle kolonne
 monthly_means = df.groupby('Month').mean(numeric_only=True)
 
