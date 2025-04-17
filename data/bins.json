@@ -1,0 +1,25 @@
+{
+    "Nedbør": [
+        ["Oppholdsvær", 0.0, 0.0],
+        ["Stort sett oppholdsvær", 0.0001, 0.4],
+        ["Lette/enkelte byger", 0.5, 2.0],
+        ["Regn, sludd, snø, byger", 2.1, 20.0],
+        ["Tildels store mengder", 20.1, 100.0],
+        ["Styrtregn", 100.1, 200.0]  
+    ],
+    "Middelvind": [
+        ["Stille", 0.0, 0.2],
+        ["Flau vind", 0.3, 1.5],
+        ["Svak vind", 1.6, 3.3],
+        ["Lett bris", 3.4, 5.4],
+        ["Laber bris", 5.5, 7.9],
+        ["Frisk bris", 8.0, 10.7],
+        ["Liten kuling", 10.8, 13.8],
+        ["Stiv kuling", 13.9, 17.1],
+        ["Sterk kuling", 17.2, 20.7],
+        ["Liten storm", 20.8, 24.4],
+        ["Full storm", 24.5, 28.4],
+        ["Sterk storm", 28.5, 32.6],
+        ["Orkan", 32.7, 200.0]
+    ]
+}
