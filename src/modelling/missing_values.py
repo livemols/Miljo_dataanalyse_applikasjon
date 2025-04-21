@@ -5,7 +5,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-#read the right files from the right folders
+# Read the right files from the right folders
 base_dir = os.path.dirname(__file__)
 data_path = os.path.abspath(os.path.join(base_dir, "..", "..", "data"))
 original_file = "blindern_data_cleaning.csv"
@@ -19,6 +19,7 @@ from data_preparation.data_cleaning import DataCleaning
 
 
 class MissingValues:
+    # Make dataFrames, one with original data, one with i high frequency of NaN, then "clean" the dataFrame 
     def make_dataframe(self,data_type,frac_missing=0.35):
         df_data = df[["Tid",data_type]].head(200)
 
@@ -32,6 +33,7 @@ class MissingValues:
 
         return df_data, df_clean
 
+    # Plot both the original df and the "cleaned" df
     def measured_calculated_plot(self,data_type,frac_missing=0.35):
         df_data, df_clean = self.make_dataframe(data_type,frac_missing)
 
@@ -46,6 +48,7 @@ class MissingValues:
         plt.legend()
         plt.show()
 
+    # Make table of the different statistical values for original df and "cleaned" df
     def table(self,data_type,frac_missing=0.35):
         df_data, df_clean = self.make_dataframe(data_type,frac_missing)
         

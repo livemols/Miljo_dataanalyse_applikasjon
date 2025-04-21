@@ -1,4 +1,4 @@
-#This file make the class data_cleaning for cleaning data
+# This file make the class data_cleaning for cleaning data
 
 import pandas as pd
 import numpy as np
@@ -20,14 +20,14 @@ class DataCleaning:
         return self
     
     def duplicates(self):
-        #Delete duplitcates (rows)
+        # Delete duplitcates (rows)
         self.df.drop_duplicates(inplace = True)
 
         return self
 
     
     def missing(self):
-        #convert all "-" to Nan
+        # Convert all "-" to Nan
         self.df = self.df.replace("-", np.nan) 
         
         return self

@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../s
 class test_behandlet_data(unittest.TestCase):
 
     def setUp(self):
-        #oppretter testlisten med én dyplikat
+        # Creates the test list with one duplicate
         self.df = pd.DataFrame({
             "Navn": ["Oslo","Oslo","Oslo","Oslo"],
             "Stasjon": ["SN18700","SN18700","SN18700","SN18700"],
@@ -24,13 +24,13 @@ class test_behandlet_data(unittest.TestCase):
         })
         self.forventede_kolonner = ["Navn","Stasjon","Tid","Makstemp","Mintemp","Middeltemp","Snø","Nedbør","Middelvind","Høye vindkast"]
 
-        #ser at navnet til kolonnene blir korrekt
+        # Make sure the column names are correct
     def test_navnendring_kolonner(self):
         df = self.df.copy()
         df.columns=self.forventede_kolonner
         self.assertEqual(list(df.columns),self.forventede_kolonner)
     
-        #ser at tiden blir skrevet om korret til Y-M-D i stedet for D-M-Y
+        # Make sure time is rewritten as Y-M-D instead of D-M-Y
     def test_tid_omskriving(self):
         df = self.df.copy()
         df["Tid"] = pd.to_datetime(df["Tid"], format="%d.%m.%Y")

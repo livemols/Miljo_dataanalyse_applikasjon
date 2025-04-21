@@ -7,36 +7,30 @@ import matplotlib.pyplot as plt
 
 
 
-# Finn absolutt sti til data-mappen
-current_dir = os.path.dirname(os.path.abspath(__file__))  # Finner mappen der testnat.py er
-data_path = os.path.join(current_dir, "..", "..", "data")  # Går én mappe opp, deretter inn i data/
+# Find absolute path to data-file
+current_dir = os.path.dirname(os.path.abspath(__file__))   # Finds folder where this file is
+data_path = os.path.join(current_dir, "..", "..", "data")  # Go two folders up, then into data/
 
-# Spesifiser filnavnet
+# Spesifi the filename
 filename = "blindern_data_cleaning.csv"  
 
-# Lag full sti til filen
+# Make full path til the file
 file_path = os.path.join(data_path, filename)
 
-
-# sorterer data etter ";" og gjør om "Tid" kolonne til datetime format
+# Sort data after ";" and format "Tid" column to datetime format
 df = pd.read_csv(file_path,delimiter=";",parse_dates=['Tid'])
 
-
 script_dir = os.path.dirname(os.path.abspath(__file__))
-
 
 os.chdir(script_dir)
 
 print(df)
 
 
-
-# Adderer en ny kolonne for månde
+# Adds a new column for month
 df['Month'] = df['Tid'].dt.month
 
-
-
-# Sorterer etter månde og regne ut gjennomsnitt for alle kolonne
+# Sorts after month and calculate the average for every column
 monthly_means = df.groupby('Month').mean(numeric_only=True)
 
 

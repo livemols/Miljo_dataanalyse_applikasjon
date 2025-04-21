@@ -31,11 +31,11 @@
 #    ],
 #}
 
-# Merk Nedbør har for siste 24 timene, men kun 1 time for styrtregn. Vind er i m/s
-# Grenser er hentet 14.april 2025 fra https://www.met.no/vaer-og-klima/begreper-i-vaervarsling 
+# NB: Precipitation is for the last 24 hours, but downpour is only for one hour. Wind is in m/s
+# Limits is form https://www.met.no/vaer-og-klima/begreper-i-vaervarsling, 14.april 2025
 
 
-#This file make the class data_analysis to analyze data
+# This file make the class data_analysis to analyze data
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -71,15 +71,15 @@ class DataAnalysis:
         self.df["Tid"] = pd.to_datetime(self.df["Tid"])
         numeric_columns = self.df.select_dtypes(include='number').columns
 
-        # Suppler automatisk med manglende grenser (50% nivå)
+        # Automatically supplement missing boundaries (50% level)
         for col in numeric_columns:
             if col not in self.limits:
                 self.limits[col] = ((self.df[col].max() - self.df[col].min()) / 10) * 5
 
-        # Kun kolonner som finnes i df
+        # Only colums who exist in df
         gyldige_kolonner = [col for col in self.limits if col in self.df.columns]
 
-        # Tell forekomster over faregrense per år
+        # Count occurrences above danger limit per year
         df_years_severity = pd.concat({
             col: self.df.loc[self.df[col] >= self.limits[col], "Tid"].dt.year.value_counts()
             for col in gyldige_kolonner
@@ -91,10 +91,10 @@ class DataAnalysis:
 
         columns_to_plot = self.df.select_dtypes(include='number').columns.tolist()
         ncols = 2
-        nrows = math.ceil(len(columns_to_plot) / ncols) # lowest int with math.ceil()
+        nrows = math.ceil(len(columns_to_plot) / ncols) # Lowest int with math.ceil()
 
         fig, axes = plt.subplots(nrows=nrows, ncols=ncols, figsize=(ncols * 6, nrows * 4))
-        axes = axes.flatten()  # Gjør det lettere å bruke én indeks fra 2D til 1D
+        axes = axes.flatten()  # Makes it easier to use one index from 2D to 1D
 
         for i, column in enumerate(columns_to_plot):
             ax = axes[i]
@@ -103,7 +103,7 @@ class DataAnalysis:
                 bin_def = self.bins[column]
                 data = df[column]
 
-                labels = [label for label, _, _ in bin_def] # "_" indikerer at denne variabelen ikke trengs
+                labels = [label for label, _, _ in bin_def] # "_" indicates that this variable is not needed
                 bin_edges = [start for _, start, _ in bin_def] + [bin_def[-1][2]]
                 bin_edges = sorted(set(bin_edges))
 
@@ -121,7 +121,7 @@ class DataAnalysis:
             ax.set_xlabel(column)
             ax.set_ylabel("Antall dager")
 
-        # Fjern tomme subplot hvis det er oddetall
+        # Remove empty subplot if it is an odd number
         for j in range(i + 1, len(axes)):
             fig.delaxes(axes[j])
 
@@ -129,14 +129,14 @@ class DataAnalysis:
         plt.show()
 
     def years_averageplot(self, df):
-        # Gjennomsnitt per mnd for hvert år fra 2015 til 2024
+        # Average per month for each year from 2014 to 2024
 
-        # Sørg for at "Tid", "År", "Måned" er i datasettet
+        # Make sure that "Tid", "År" and "Måned" are in the dataset
         self.df["Tid"] = pd.to_datetime(self.df["Tid"])
         self.df["År"] = self.df["Tid"].dt.year
         self.df["Måned"] = self.df["Tid"].dt.month
 
-        # Velg numeriske kolonner
+        # Select numeric columns
         numeric_columns = self.df.select_dtypes(include='number').columns.difference(["År", "Måned"])
 
         fig, ax = plt.subplots(len(numeric_columns), 1, figsize=(14, 4 * len(numeric_columns)))
@@ -145,7 +145,7 @@ class DataAnalysis:
             for year in sorted(self.df["År"].unique()):
                 subset = self.df[self.df["År"] == year].copy()
                 
-                # Lag fiktiv dato i 2020 (for å sammenligne like "dager i året" uavhengig av år)
+                # Create fictitious date in 2020 (to compare equal "days of the year" regardless of year)
                 subset["Tid_syntetisk"] = pd.to_datetime("2020-" + subset["Tid"].dt.strftime("%m-%d"))
                 
                 ax[i].plot(subset["Tid_syntetisk"], subset[column], label=str(year), linewidth=0.8)
