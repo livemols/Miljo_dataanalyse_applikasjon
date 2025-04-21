@@ -1,41 +1,4 @@
-#from dataclasses import dataclass
-
-#@dataclass
-#class VærKategori:
-#    navn: str
-#    nedre_grense: float
-#    øvre_grense: float
-
-#bins = {
-#    "Nedbør": [
-#        VærKategori("Pent vær", 0.0, 0.0),
-#        VærKategori("Stort sett oppholdsvær", 0.0001, 0.4),
-#        VærKategori("Litt nedbør", 0.5, 2.0),
-#        VærKategori("Regn/sludd/snø/byger", 2.0001, 20.0),
-#        VærKategori("Store mengder", 20.0001, 200.0),
-#    ],
-#    "Vind": [
-#        VærKategori("Stille", 0.0, 0.2),
-#        VærKategori("Flau vind", 0.3, 1.5),
-#        VærKategori("Svak vind", 1.6, 3.3),
-#        VærKategori("Lett bris", 3.4, 5.4),
-#        VærKategori("Laber bris", 5.5, 7.9),
-#        VærKategori("Frisk bris", 8.0, 10.7),
-#        VærKategori("Liten kuling", 10.8, 13.8),
-#        VærKategori("Stiv kuling", 13.9, 17.1),
-#        VærKategori("Sterk kuling", 17.2, 20.7),
-#        VærKategori("Liten storm", 20.8, 24.4),
-#        VærKategori("Full storm", 24.5, 28.4),
-#        VærKategori("Sterk storm", 28.5, 32.6),
-#        VærKategori("Orkan", 32.7, 200.0),
-#    ],
-#}
-
-# Merk Nedbør har for siste 24 timene, men kun 1 time for styrtregn. Vind er i m/s
-# Grenser er hentet 14.april 2025 fra https://www.met.no/vaer-og-klima/begreper-i-vaervarsling 
-
-
-#This file make the class data_analysis to analyze data
+# This file make the class data_analysis to analyze data 
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
