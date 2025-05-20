@@ -5,7 +5,7 @@ from tabulate import tabulate
 from datetime import datetime
 import matplotlib.pyplot as plt
 
-
+# Resolved bug with assistance from ChatGPT.
 
 # Find absolute path to data-file
 current_dir = os.path.dirname(os.path.abspath(__file__))   # Finds folder where this file is
