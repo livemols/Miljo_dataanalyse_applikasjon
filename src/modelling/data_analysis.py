@@ -41,6 +41,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 import matplotlib.dates as mdates
+from statistics import mode
 
 class DataAnalysis:
     def __init__(self, df, main, others, limits, known_bins=None):
@@ -49,6 +50,101 @@ class DataAnalysis:
         self.others = others
         self.limits = limits.copy()
         self.bins = known_bins or self.created_bins()
+
+    def statistical_values(self):
+        df = self.df.copy()
+        df['Tid'] = pd.to_datetime(df['Tid'], errors='coerce')
+
+        # Calculate the average, median and standard deviation for each column
+        print(f"The average for each column is:\n{df.mean(numeric_only=True)}")
+        print(f"The median for each column is:\n{df.median(numeric_only=True)}")
+        print(f"The standard deviation for each column is:\n{df.std(numeric_only=True)}")
+
+        # Calculate the seasonal average, median and standard deviation for each column
+        def season(dato):
+            month=dato.month
+            if month in [12,1,2]:
+                return "Winter"
+            elif month in [3,4,5]:
+                return "Spring"
+            elif month in [6,7,8]:
+                return "Summer"
+            elif month in [9,10,11]:
+                return "Autumn"
+
+        df['season'] = df['Tid'].apply(season)
+
+        print(f"The average for each season is:\n{df.groupby('season').mean(numeric_only=True)}")
+        print(f"The median for each season is:\n{df.groupby('season').median(numeric_only=True)}")
+        print(f"The standard deviation for each season is:\n{df.groupby('season').std(numeric_only=True)}")
+
+    def drydays(self, limit=12, format="print"):
+        count=0
+        no_rain_days, dry_periods=[], []
+        df = self.df.copy()
+
+        #Calculates the dataframe with dates and length of the period
+        if format !="print":
+            for i in range(len(df)-1):
+                if df["Nedbør"][i] <= 0:
+                    count += 1
+                else:
+                    if count >= limit:
+                        end_date = pd.to_datetime(df["Tid"][i-1]).date()
+                        start_date = end_date - pd.Timedelta(days=count-1)
+                        dry_periods.append({
+                            "Start": start_date,
+                            "End": end_date,
+                            "Duration": count
+                        })
+                    count = 0
+            return pd.DataFrame(dry_periods)
+        
+        #Prints the length of the periods, the mode and the limit
+        else: 
+            for i in range(len(df)-1):
+                if df["Nedbør"][i] <= 0:
+                    count += 1
+                else:
+                    if count >=limit:
+                        no_rain_days.append(count)
+                    count=0     
+            print(f"Antall dager uten nedbør etter en annen: {no_rain_days}")
+            print(f"Typetall for antall dager uten nedbør sammenhengende: {mode(no_rain_days)}\nMinste antall dager er {limit}")
+
+    def snowdays(self, limit=5, format="print"):
+        count=0
+        snowdays,snow_periods = [], []
+        df = self.df.copy()
+        
+        #Calculates the dataframe with dates and length of the period
+        if format != "print":
+            for i in range(len(df)-1):
+                if df["Snø"][i] > 0:
+                    count += 1
+                else:
+                    if count >= limit:
+                        end_date = pd.to_datetime(df["Tid"][i-1]).date()
+                        start_date = end_date - pd.Timedelta(days=count-1)
+                        snow_periods.append({
+                            "Start": start_date,
+                            "End": end_date,
+                            "Duration": count
+                        })
+                    count = 0
+            return pd.DataFrame(snow_periods)
+        
+        #Prints the length of the periods, the mode and the limit
+        else:
+            for i in range(len(df)-1):
+                if df["Snø"][i] > 0:
+                    count += 1
+                else:
+                    if count >= limit:
+                        snowdays.append(count)
+                    count=0
+            print(f"Antall dager med snø etter en annen: {snowdays}")
+            print(f"Typetall for antall dager med snø sammenhengende: {mode(snowdays)}\nMinste antall dager er {limit}")
 
     def scatterplot(self):
         for column in self.others:
