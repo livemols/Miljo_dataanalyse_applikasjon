@@ -24,7 +24,6 @@ class DataCleaning:
         self.df.drop_duplicates(inplace = True)
 
         return self
-
     
     def missing(self):
         # Convert all "-" to Nan
