@@ -55,7 +55,7 @@ class DataVisual:
                 color_discrete_sequence=px.colors.sequential.Aggrnyl,
             )
             fig.update_traces(textposition='outside', textinfo='percent+label', sort=False)
-            fig.show()
+            return fig
 
         # Makes the menu
         år_valg = widgets.Dropdown(options=sorted(df["Year"].unique()), description="År:")
