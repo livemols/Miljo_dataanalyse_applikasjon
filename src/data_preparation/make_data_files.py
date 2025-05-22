@@ -30,6 +30,7 @@ class MakeDataFiles:
         merged_df.to_csv(merged_file_path,index=False,sep=";")
 
         print("Filene er slått sammen")
+        
     def make_dirty_data(self, filename = "blindern.csv", dirty_file = "blindern_dirty_data_generator.csv"):
         # Find absolute path to data-file
         current_dir = os.path.dirname(os.path.abspath(__file__))  # Finds folder where this file is
