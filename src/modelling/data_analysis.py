@@ -41,6 +41,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 import matplotlib.dates as mdates
+from statistics import mode
+import seaborn as sns
 
 class DataAnalysis:
     def __init__(self, df, main, others, limits, known_bins=None):
@@ -223,34 +225,19 @@ class DataAnalysis:
         plt.show()
 
     def years_averageplot(self, df):
-        # Average per month for each year from 2014 to 2024
-
-        # Make sure that "Tid", "År" and "Måned" are in the dataset
-        self.df["Tid"] = pd.to_datetime(self.df["Tid"])
-        self.df["År"] = self.df["Tid"].dt.year
-        self.df["Måned"] = self.df["Tid"].dt.month
-
-        # Select numeric columns
-        numeric_columns = self.df.select_dtypes(include='number').columns.difference(["År", "Måned"])
-
-        fig, ax = plt.subplots(len(numeric_columns), 1, figsize=(14, 4 * len(numeric_columns)))
-
-        for i, column in enumerate(numeric_columns):
-            for year in sorted(self.df["År"].unique()):
-                subset = self.df[self.df["År"] == year].copy()
-                
-                # Create fictitious date in 2020 (to compare equal "days of the year" regardless of year)
-                subset["Tid_syntetisk"] = pd.to_datetime("2020-" + subset["Tid"].dt.strftime("%m-%d"))
-                
-                ax[i].plot(subset["Tid_syntetisk"], subset[column], label=str(year), linewidth=0.8)
-
-            ax[i].set_title(f"{column} – daglig utvikling per år")
-            ax[i].set_xlabel("Måned")
-            ax[i].set_ylabel(column)
-            ax[i].xaxis.set_major_locator(mdates.MonthLocator())
-            ax[i].xaxis.set_major_formatter(mdates.DateFormatter('%b'))  # Jan, Feb, ...
-            ax[i].legend()
-            ax[i].grid(True)
-
-        plt.tight_layout()
-        plt.show()
+        df['Tid'] = pd.to_datetime(df['Tid'])
+        df['Dag'] = df['Tid'].dt.day
+        df['Måned'] = df['Tid'].dt.month
+        df['Ukedag'] = df['Tid'].dt.weekday
+        df['År'] = df['Tid'].dt.year
+        # Gå gjennom numeriske kolonner, unntatt 'Tid', 'Dag', 'Måned', 'Ukedag', 'År'
+        for column in df.select_dtypes(include=np.number).columns:
+            if column not in ['Tid', 'Dag', 'Måned', 'Ukedag', 'År']:
+                per_måned = df.groupby(['År', 'Måned'])[column].sum().reset_index()
+                plt.figure(figsize=(14,6))
+                sns.barplot(data=per_måned, x='Måned', y=column, hue='År', palette='coolwarm')
+                plt.title(f'Total månedlig {column.lower()} per år')
+                plt.xlabel('Måned')
+                plt.ylabel(f'{column} (mm)')
+                plt.legend(title='År')
+                plt.show()
