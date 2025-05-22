@@ -77,6 +77,27 @@ class test_predictive_analysis(unittest.TestCase):
                 self.assertTrue((df[column] >= 0).all(), f"Negative values found in {column}")
 
         self.assertEqual(df.isna().sum().sum(), 0, "NaN is still existing in DataFrame")
+    
+
+
+
+    def test_season(self):
+
+        self.assertEqual(season(datetime(2023, 1, 15)), "Winter")
+        self.assertEqual(season(datetime(2022, 12, 15)), "Winter")
+        
+
+        self.assertEqual(season(datetime(2023, 4, 15)), "Spring")
+        self.assertEqual(season(datetime(2023, 5, 25)), "Spring")    #ChatGpt assisted with translating own logic to code
+
+        self.assertEqual(season(datetime(2014, 6, 2)), "Summer")
+        self.assertEqual(season(datetime(2023, 8, 15)), "Summer")
+
+        self.assertEqual(season(datetime(2017, 9, 27)), "Autumn")
+        self.assertEqual(season(datetime(2020, 10, 15)), "Autumn")
+
+
+
 
 
 

@@ -8,7 +8,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+#The class DataVisual contains functions and methods for plotting the visuals that is displayed in data_visual.ipynb
 class DataVisual:
     def __init__(self, df, main, others, limits, known_bins=None):
         self.df = df.copy()
@@ -36,6 +36,10 @@ class DataVisual:
         df["Year"] = df["Tid"].dt.year
         df["NedbørKategori"] = df["Nedbør"].apply(kategoriser_nedbør)
 
+
+
+
+
         # Makes the pie chart
         def vis_pie(year):
 
@@ -55,7 +59,12 @@ class DataVisual:
 
         # Makes the menu
         år_valg = widgets.Dropdown(options=sorted(df["Year"].unique()), description="År:")
-        widgets.interact(vis_pie, year=år_valg)
+        widgets.interact(vis_pie, year=år_valg)           # ChatGpt assisted with column placement in template for pie chart
+
+
+
+
+
 
     # Create a Plotly Gantt-like chart to visualize the dry periods
     def plot_dry_periods(self, dry_periods_df):
@@ -78,6 +87,10 @@ class DataVisual:
             )
         fig.show()
 
+
+
+        
+
     def plot_snow_periods(self, snow_periods_df):
         fig = px.timeline(
             snow_periods_df,
@@ -98,6 +111,10 @@ class DataVisual:
             )
         fig.show()
 
+
+
+
+
     def wind_precentiles(self):
         df = self.df.copy()
         # Get wind data and sorts it
@@ -117,6 +134,10 @@ class DataVisual:
         )
         fig.show()
     
+
+
+
+
     def linechart_wind(self):
         df = self.df.copy()
         # Calculate statistics
@@ -142,6 +163,9 @@ class DataVisual:
 
         fig.show()
     
+
+
+
     def heatmap(self):
         df = self.df.copy()
         sns.set_theme()
@@ -149,7 +173,7 @@ class DataVisual:
         # Create pivot table - months vs years with temperature values
         temp_pivot = df.pivot_table(
             index=df["Tid"].dt.month,
-            columns=df["Tid"].dt.year,
+            columns=df["Tid"].dt.year,        #ChatGpt helped debugging an error in this logic
             values="Makstemp",
             aggfunc='mean'  
         )
@@ -158,6 +182,10 @@ class DataVisual:
         ax.set_title("Heatmap")
         ax.set_xlabel("År", labelpad=10)  # Set directly on the axis
         ax.set_ylabel("Måned", labelpad=10) # Month on x-axis
+
+
+
+
 
     def extreme_weather_cases(self,extreme_weather):
         fig = px.bar(extreme_weather, x="Tid", y=["Makstemp", "Mintemp", "Snø", "Nedbør", "Høye vindkast"], title="Tilfeller av ekstremvær")
