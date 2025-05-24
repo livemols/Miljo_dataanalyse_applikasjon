@@ -69,7 +69,7 @@ class DataAnalysis:
 
         # Calculate the seasonal average, median and standard deviation for each column
         def season(dato):
-            month=dato.month
+            month = dato.month
             if month in [12,1,2]:
                 return "Vinter"
             elif month in [3,4,5]:
@@ -85,15 +85,15 @@ class DataAnalysis:
         print(f"Median for hver sesong er:\n{(df.groupby('Sesong').median(numeric_only=True)).T.round(2)}")
         print(f"Standardavviket for hver sesong er:\n{(df.groupby('Sesong').std(numeric_only=True)).T.round(2)}")
 
-    def drydays(self, limit=12, format="print"):
-        count=0
+    def drydays(self, limit = 12, format = "print"):
+        count = 0
         no_rain_days, dry_periods=[], []
         df = self.df.copy()
 
         #Calculates the dataframe with dates and length of the period
-        if format !="print":
-            for i in range(len(df)-1):
-                if df["Nedbør"][i] <= 0:
+        if format != "print":
+            for rain in df["Nedbør"]:
+                if rain <= 0:
                     count += 1
                 else:
                     if count >= limit:
@@ -109,25 +109,25 @@ class DataAnalysis:
         
         #Prints the length of the periods, the mode and the limit
         else: 
-            for i in range(len(df)-1):
-                if df["Nedbør"][i] <= 0:
+            for rain in df["Nedbør"]:
+                if rain <= 0:
                     count += 1
                 else:
-                    if count >=limit:
+                    if count >= limit:
                         no_rain_days.append(count)
-                    count=0     
+                    count = 0     
             print(f"Antall dager uten nedbør etter en annen: {no_rain_days}")
             print(f"Typetall for antall dager uten nedbør sammenhengende: {mode(no_rain_days)}\nMinste antall dager er {limit}")
 
-    def snowdays(self, limit=5, format="print"):
-        count=0
+    def snowdays(self, limit = 5, format="print"):
+        count = 0
         snowdays,snow_periods = [], []
         df = self.df.copy()
         
         #Calculates the dataframe with dates and length of the period
         if format != "print":
-            for i in range(len(df)-1):
-                if df["Snø"][i] > 0:
+            for snow in df["Snø"]:
+                if snow > 0:
                     count += 1
                 else:
                     if count >= limit:
@@ -139,12 +139,13 @@ class DataAnalysis:
                             "Duration": count
                         })
                     count = 0
+
             return pd.DataFrame(snow_periods)
         
         #Prints the length of the periods, the mode and the limit
         else:
-            for i in range(len(df)-1):
-                if df["Snø"][i] > 0:
+            for snow in df["Snø"]:
+                if snow > 0:
                     count += 1
                 else:
                     if count >= limit:
