@@ -92,8 +92,8 @@ class DataAnalysis:
 
         #Calculates the dataframe with dates and length of the period
         if format != "print":
-            for rain in df["Nedbør"]:
-                if rain <= 0:
+            for i in range(len(df)-1):
+                if df["Nedbør"][i] <= 0:
                     count += 1
                 else:
                     if count >= limit:
@@ -109,8 +109,8 @@ class DataAnalysis:
         
         #Prints the length of the periods, the mode and the limit
         else: 
-            for rain in df["Nedbør"]:
-                if rain <= 0:
+            for rain in range(len(df)-1):
+                if df["Nedbør"][i] <= 0:
                     count += 1
                 else:
                     if count >= limit:
@@ -126,8 +126,8 @@ class DataAnalysis:
         
         #Calculates the dataframe with dates and length of the period
         if format != "print":
-            for snow in df["Snø"]:
-                if snow > 0:
+            for i in range(len(df)-1):
+                if df["Snø"][i] > 0:
                     count += 1
                 else:
                     if count >= limit:
@@ -144,8 +144,8 @@ class DataAnalysis:
         
         #Prints the length of the periods, the mode and the limit
         else:
-            for snow in df["Snø"]:
-                if snow > 0:
+            for i in range(len(df)-1):
+                if df["Snø"][i] > 0:
                     count += 1
                 else:
                     if count >= limit:
