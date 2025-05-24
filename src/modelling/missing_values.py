@@ -1,11 +1,13 @@
+# This file has used ChatGPT (OpenAI) for troubleshooting and explanation of error codes.
+
 import os
 import sys 
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
 
-
 # Read the right files from the right folders
+
 base_dir = os.path.dirname(__file__)
 data_path = os.path.abspath(os.path.join(base_dir, "..", "..", "data"))
 original_file = "blindern_data_cleaning.csv"

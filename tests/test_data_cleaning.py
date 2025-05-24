@@ -8,8 +8,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../s
 
 class test_behandlet_data(unittest.TestCase):
 
+    # Creates the test list with one duplicate, np.nan and outliars
     def setUp(self):
-        # Creates the test list with one duplicate
         self.df = pd.DataFrame({
             "Navn": ["Oslo","Oslo","Oslo","Oslo"],
             "Stasjon": ["SN18700","SN18700","SN18700","SN18700"],
@@ -24,23 +24,28 @@ class test_behandlet_data(unittest.TestCase):
         })
         self.forventede_kolonner = ["Navn","Stasjon","Tid","Makstemp","Mintemp","Middeltemp","Snø","Nedbør","Middelvind","Høye vindkast"]
 
-        # Make sure the column names are correct
-    def test_navnendring_kolonner(self):
+    # Make sure the column names are correct
+    def test_renaming_columns(self):
+
         df = self.df.copy()
         df.columns=self.forventede_kolonner
         self.assertEqual(list(df.columns),self.forventede_kolonner)
     
-        # Make sure time is rewritten as Y-M-D instead of D-M-Y
-    def test_tid_omskriving(self):
+    # Make sure time is rewritten as Y-M-D instead of D-M-Y
+    def test_time_rewriting(self):
+
         df = self.df.copy()
         df["Tid"] = pd.to_datetime(df["Tid"], format="%d.%m.%Y")
         self.assertTrue(pd.api.types.is_datetime64_any_dtype(df["Tid"]))
 
-    def test_duplikat_fjerning(self):
+    # Tests to see if the duplicate is removed
+    def test_duplicate_removal(self):
+
         df = self.df.copy()
         df.drop_duplicates(inplace = True)
         self.assertEqual(len(df),(len(self.df)-1))
 
+    # Makes sure the outliars are removed
     def test_outlier_removal(self):
         df = self.df.copy()
 
@@ -63,11 +68,10 @@ class test_behandlet_data(unittest.TestCase):
 
             self.assertTrue(df[column].dropna().between(lower_limit, upper_limit).all(), f"Outliers found in {column}")
 
-
+    # Replaces NaN with values and tests if there are any NaN left.
     def test_time_series_data_processing(self): 
         
         df = self.df.copy()
-
 
         for column in df.select_dtypes(include=['number']).columns:
             df[column] = df[column].interpolate(method='linear').round(1)

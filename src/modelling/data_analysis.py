@@ -36,6 +36,9 @@
 
 
 # This file make the class data_analysis to analyze data
+
+# This file has used ChatGPT (OpenAI) for troubleshooting and explanation of error codes.
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -56,27 +59,31 @@ class DataAnalysis:
         df['Tid'] = pd.to_datetime(df['Tid'], errors='coerce')
 
         # Calculate the average, median and standard deviation for each column
-        print(f"The average for each column is:\n{df.mean(numeric_only=True)}")
-        print(f"The median for each column is:\n{df.median(numeric_only=True)}")
-        print(f"The standard deviation for each column is:\n{df.std(numeric_only=True)}")
+        stats_df = pd.DataFrame({
+            "Gjennomsnitt": df.mean(numeric_only=True).round(2),
+            "Median": df.median(numeric_only=True).round(2),
+            "Standardavvik": df.std(numeric_only=True).round(2)
+        })
+        print("Statistiske verdier for hver kolonne:")
+        print(stats_df)
 
         # Calculate the seasonal average, median and standard deviation for each column
         def season(dato):
             month=dato.month
             if month in [12,1,2]:
-                return "Winter"
+                return "Vinter"
             elif month in [3,4,5]:
-                return "Spring"
+                return "Vår"
             elif month in [6,7,8]:
-                return "Summer"
+                return "Sommer"
             elif month in [9,10,11]:
-                return "Autumn"
+                return "Høst"
 
-        df['season'] = df['Tid'].apply(season)
+        df['Sesong'] = df['Tid'].apply(season)
 
-        print(f"The average for each season is:\n{df.groupby('season').mean(numeric_only=True)}")
-        print(f"The median for each season is:\n{df.groupby('season').median(numeric_only=True)}")
-        print(f"The standard deviation for each season is:\n{df.groupby('season').std(numeric_only=True)}")
+        print(f"Gjennomsnittet for hver sesong er:\n{(df.groupby('Sesong').mean(numeric_only=True)).T.round(2)}")
+        print(f"Median for hver sesong er:\n{(df.groupby('Sesong').median(numeric_only=True)).T.round(2)}")
+        print(f"Standardavviket for hver sesong er:\n{(df.groupby('Sesong').std(numeric_only=True)).T.round(2)}")
 
     def drydays(self, limit=12, format="print"):
         count=0
@@ -161,26 +168,44 @@ class DataAnalysis:
         df["Tid"] = pd.to_datetime(df["Tid"])
         df["Tid"] = df["Tid"].dt.year
         numeric_columns = df.select_dtypes(include='number').columns
-        return df.groupby("Tid")[numeric_columns].max()
+        
+        # Takes the minimum values of mintemp, and the maximum value of everything else except middeltemp (per year). 
+        agg_funcs = {}                                  # ChatGPT assisted with buildt-in pandas functions
+        for col in numeric_columns:
+            if col == "Mintemp":
+                agg_funcs[col] = "min"
+            elif col != "Middeltemp" and col != "Tid":
+                agg_funcs[col] = "max"
+
+        return df.groupby("Tid").agg(agg_funcs)
 
     def years_severity(self):
         self.df["Tid"] = pd.to_datetime(self.df["Tid"])
         numeric_columns = self.df.select_dtypes(include='number').columns
 
         # Automatically supplement missing boundaries (50% level)
+        agg_funcs = {}
         for col in numeric_columns:
             if col not in self.limits:
-                self.limits[col] = ((self.df[col].max() - self.df[col].min()) / 10) * 5
+                if col == "Mintemp":
+                    self.limits[col] = ((self.df[col].min() - self.df[col].max()) / 20) * 5
+                elif col != "Middeltemp" and col != "Tid":
+                    self.limits[col] = ((self.df[col].max() - self.df[col].min()) / 10) * 5
 
         # Only colums who exist in df
         gyldige_kolonner = [col for col in self.limits if col in self.df.columns]
 
-        # Count occurrences above danger limit per year
-        df_years_severity = pd.concat({
-            col: self.df.loc[self.df[col] >= self.limits[col], "Tid"].dt.year.value_counts()
-            for col in gyldige_kolonner
-        }, axis=1).fillna(0).astype(int).sort_index()
-
+        # Count occurrences above danger limit per year 
+        results = {}
+        for col in gyldige_kolonner:
+            if col == "Mintemp":
+                mask = self.df[col] <= self.limits[col]
+            else:
+                mask = self.df[col] >= self.limits[col]
+            
+            år = self.df.loc[mask, "Tid"].dt.year
+            results[col] = år.value_counts()
+            df_years_severity = pd.DataFrame(results).fillna(0).astype(int).sort_index()
         return df_years_severity
     
     def df_hist(self, df):
@@ -230,7 +255,7 @@ class DataAnalysis:
         df['Måned'] = df['Tid'].dt.month
         df['Ukedag'] = df['Tid'].dt.weekday
         df['År'] = df['Tid'].dt.year
-        # Gå gjennom numeriske kolonner, unntatt 'Tid', 'Dag', 'Måned', 'Ukedag', 'År'
+        # Goes through numerical columns, except 'Tid', 'Dag'; 'Måned', 'Ukedag', 'År'
         for column in df.select_dtypes(include=np.number).columns:
             if column not in ['Tid', 'Dag', 'Måned', 'Ukedag', 'År']:
                 per_måned = df.groupby(['År', 'Måned'])[column].sum().reset_index()

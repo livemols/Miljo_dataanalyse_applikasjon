@@ -59,7 +59,7 @@ class MakeDataFiles:
 
         rows_to_duplicate=list(range(1,50))
         duplicates = df.iloc[rows_to_duplicate]  
-        df = pd.concat([df, duplicates], ignore_index=True)   #ChatGpt assisted with buildt-in pandas functions
+        df = pd.concat([df, duplicates], ignore_index=True)   # ChatGPT assisted with buildt-in pandas functions
 
         # ADD OUTLIERS
         # Make a list with outliers
@@ -90,7 +90,7 @@ class MakeDataFiles:
         modified_file_original = os.path.join(data_path, cleaned_file)
 
         # Cleaning original file
-        df = data_cleaner.form().duplicates().missing().outliers().replacing().df
+        df = data_cleaner.form().duplicates().missing().replace_comma().outliers().replacing().df
 
         # Save the modified DataFrame as a new CSV file in the same folder
         df.to_csv(modified_file_original, index=False, sep=";")  # Keep the same delimiter (;)
