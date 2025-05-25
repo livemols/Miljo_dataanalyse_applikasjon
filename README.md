@@ -1,47 +1,37 @@
 
-# Gruppe 113: Anvendt programmering
+## Gruppe 113: Anvendt programmering
+# Klimaanalyse av værforhold i Blindern, Oslo
+
+## Introduksjon
+I dagens samfunn er det mye debatt og diskusjoner rundt klimaendringer, økende tilfeller av ekstremvær og naturens tilstand. For å skape en grønnere og bærekraftig fremtid er det viktig å ha forståelse og innsikt på miljødata. Da man kan følge med på endringer og trender, ta informerte beslutninger og utvikle løsninger. 
+
+Oppgaven vår går ut på å utvikle et program som henter, analyserer og visualiserer værdata fra Blindern, Oslo. Datasettet inneholder variabler som temperatur, nedbør, vind og snødybde. Ved å strukturere og analysere disse dataene, får man verdifull innsikt i historiske værmønstre og kan lettere identifisere mulige fremtidige trender.
+Prosjektet er delt i to hoveddeler: I første del fokuseres det på å rense, sortere og forberede dataene for videre bruk. I andre del analyseres og visualiseres dataene ved hjelp av programmering, med mål om å trekke ut meningsfull informasjon og presentere den på en tydelig og forståelig måte. Det skal også beregnes prognoser for fremtidig værforhold ved regresjon. 
 
 ### Innholdsfortegnelse:
- - Intro
- - Oppgave fordeling
- - Data
- - Kildekritikk
 
-## Intro
-Oppgaven går ut på å utvikle et program som henter, analyserer og visualiserer værdata. Da kan man få innsikt i værmønstre og kan identifisere fremtidige værmønster. I del 1 skal man sortere, rense og forberede datasettet til videre utvikling. Mens i del 2 skal man analysere og visualisere datasettet. 
-
-## Oppgave oppsett
-Hovedoppgaven er delt inn i del 1 og del 2. 
-Del 1 består av filene:
-- Notatbøkene:
+#### Del 1: Rensing og forberedelse
+- I scr-mappe:
+    - data_preparation-mappe:
+        - data_cleaning.py
+        - make_data_files.py
+- I tests-mappe:
+    -test_data_cleaning
+- I notebooks-mappe:
+    - data_understanding.pynb
     - data_cleaning.ipynb
-    - data_understanding.ipynb
-- src (data_preperatiron):
-    - combine_files.py
-    - data_cleaning.py
-    - dirty_data_generator.py
-    - month_average.py
 
-Del 2 består av filene: 
-- Notatbøkene:
+ #### Del 2: Analyse, visualisering og predikasjon
+- I scr-mappe:
+    - modelling-mappe:
+        - data_analysis.py
+        - data_visual.py
+        - missing_visual.py
+- I tests-mappe:
+    - test_data_analysis.py
+    -test_predicative_analysis.py
+- I notebooks-mappe:
     - data_analysis.ipynb
     - data_visual.ipynb
     - predictive_analysis.ipynb
-    - Refleksjonsnotat.ipynb
-- src (modelling):
-    - data_analysis.py
-    - missing_values.py
-
-## Data
-Datasettet vi har tatt utgangspunkt i er data fra Blindern værstasjon (SN18700) fra 1.januar 2014 til og med 31.desember 2024. Værfenomenene vi har tatt utgangspunkt i er maks-, min- og middeltemperatur, snø, nedbør, middelvind og høye vindkast. Det gir oss et godt overblikk over vanlige naturfenomener i Oslo-området og gir oss et godt utgangspunkt for å identifisere fremtidige værmønster senere i oppgaven. 
-
-## Kildekritikk
-Datasettet vårt er basert på data fra en nettside som eies av Norsk klimaservicesenter (KSS). KSS er et samarbeid mellom forskjellige organisasjoner: Meteorologisk institutt, Norges vassdrags- og energidirektorat, Kraftverket, NORCE og Bjerknessenteret. Organisasjonene er pålitelige og dataen som er samlet virker realistisk. For vårt spesifikke datasett er Metrologisk institutt kilden til dataen.
-
-Deres data er lett tilgjengelig gjennom en side hvor du får tilgang på værdata. Dette er gjennom å velge forskjellige kategorier som tidsoppløsning, værelementer og værstasjon. Dette bidrar til at nettsiden har god brukervennlighet og gjør det lett å kunne krysseksaminere dataene med en annen kilde. 
-
-Linken til nettsiden er :https://seklima.met.no/observations/
-Værdataen vi har hentet fra KSS er originalt fra Metrologisk institutt.
-
-Vi valgte å samle data fra Blindern værsenter siden de hadde for det meste fullstendig data. 
-
+    - Refleksjonsnotat
