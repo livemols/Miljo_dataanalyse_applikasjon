@@ -1,5 +1,7 @@
 # This file make the class data_cleaning for cleaning data
 
+# This file has used ChatGPT (OpenAI) for troubleshooting and explanation of error codes.
+
 import pandas as pd
 import numpy as np
 
@@ -48,6 +50,12 @@ class DataCleaning:
             print(f"TypeError: {te}")
         except Exception as e:
             print(f"Unexpected error: {e}")
+    
+    def replace_comma(self):
+            # Convert all "," to "."
+            self.df = self.df.replace(",", ".") 
+            
+            return self
 
     def outliers(self):
         try:
