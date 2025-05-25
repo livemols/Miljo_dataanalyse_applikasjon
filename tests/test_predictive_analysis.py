@@ -1,3 +1,6 @@
+# This file is a unittest for functions and classe(s) related to predictive analysis
+# This file has used ChatGPT (OpenAI) for troubleshooting and explanation of error codes.
+
 import sys
 import pandas as pd
 import os 

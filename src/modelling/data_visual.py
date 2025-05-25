@@ -1,14 +1,16 @@
+#The class DataVisual contains functions and methods for plotting the visuals that is displayed in data_visual.ipynb
+# This file has used ChatGPT (OpenAI) for troubleshooting and explanation of error codes.
+
 import pandas as pd
 import numpy as np
 import os
 import json
 import ipywidgets as widgets
-from IPython.display import display
 import plotly.express as px
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
-#The class DataVisual contains functions and methods for plotting the visuals that is displayed in data_visual.ipynb
+
 class DataVisual:
     def __init__(self, df, main, others, limits, known_bins=None):
         self.df = df.copy()

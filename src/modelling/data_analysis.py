@@ -1,5 +1,4 @@
-# This file make the class data_analysis to analyze data
-
+# This file make the class DataAnalysis for data_analysis.ipynb
 # This file has used ChatGPT (OpenAI) for troubleshooting and explanation of error codes.
 
 import pandas as pd

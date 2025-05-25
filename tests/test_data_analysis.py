@@ -1,10 +1,12 @@
+# This file is a unittest for functions and classe(s) related to data analysis
+# This file has used ChatGPT (OpenAI) for troubleshooting and explanation of error codes.
+
 import sys
 import pandas as pd
 import os 
 import unittest
 import numpy as np
 from statistics import mode
-import matplotlib.dates as mdates
 import datetime as datetime
 
 
@@ -103,14 +105,8 @@ class test_data_analysis(unittest.TestCase):
         self.assertIn("Nedbør", updated_limits, "Nye grenser ble ikke opprettet for kategorier uten gitt grense")
         self.assertEqual(updated_limits["Nedbør"], 2.5, "Ikke riktig beregnet grense")
 
-        # Hvis indeksen er datetime eller string, gjør om til årstall som int
-        if not pd.api.types.is_integer_dtype(result_df.index):
-            result_df.index = result_df.index.year if hasattr(result_df.index, 'year') else result_df.index.astype(str).str[:4].astype(int)
-
-        # Sorter indeksen igjen for å holde orden
+        #ChatGpt helped debugging an error in this logic and assisted with translating own logic to code
         result_df = result_df.set_index("Tid")
-
-        # Så kan du trygt gjøre testen:
         self.assertEqual(result_df.loc[2023, "Mintemp"], 1, "Teller ikke overskridelse av grense")
 
 
