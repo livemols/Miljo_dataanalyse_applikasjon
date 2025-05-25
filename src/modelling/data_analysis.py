@@ -71,7 +71,7 @@ class DataAnalysis:
         
         #Prints the length of the periods, the mode and the limit
         else: 
-            for rain in range(len(df)-1):
+            for i in range(len(df)-1):
                 if df["Nedbør"][i] <= 0:
                     count += 1
                 else:
