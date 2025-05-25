@@ -1,42 +1,4 @@
-#from dataclasses import dataclass
-
-#@dataclass
-#class VærKategori:
-#    navn: str
-#    nedre_grense: float
-#    øvre_grense: float
-
-#bins = {
-#    "Nedbør": [
-#        VærKategori("Pent vær", 0.0, 0.0),
-#        VærKategori("Stort sett oppholdsvær", 0.0001, 0.4),
-#        VærKategori("Litt nedbør", 0.5, 2.0),
-#        VærKategori("Regn/sludd/snø/byger", 2.0001, 20.0),
-#        VærKategori("Store mengder", 20.0001, 200.0),
-#    ],
-#    "Vind": [
-#        VærKategori("Stille", 0.0, 0.2),
-#        VærKategori("Flau vind", 0.3, 1.5),
-#        VærKategori("Svak vind", 1.6, 3.3),
-#        VærKategori("Lett bris", 3.4, 5.4),
-#        VærKategori("Laber bris", 5.5, 7.9),
-#        VærKategori("Frisk bris", 8.0, 10.7),
-#        VærKategori("Liten kuling", 10.8, 13.8),
-#        VærKategori("Stiv kuling", 13.9, 17.1),
-#        VærKategori("Sterk kuling", 17.2, 20.7),
-#        VærKategori("Liten storm", 20.8, 24.4),
-#        VærKategori("Full storm", 24.5, 28.4),
-#        VærKategori("Sterk storm", 28.5, 32.6),
-#        VærKategori("Orkan", 32.7, 200.0),
-#    ],
-#}
-
-# NB: Precipitation is for the last 24 hours, but downpour is only for one hour. Wind is in m/s
-# Limits is form https://www.met.no/vaer-og-klima/begreper-i-vaervarsling, 14.april 2025
-
-
-# This file make the class data_analysis to analyze data
-
+# This file make the class DataAnalysis for data_analysis.ipynb
 # This file has used ChatGPT (OpenAI) for troubleshooting and explanation of error codes.
 
 import pandas as pd
@@ -48,14 +10,14 @@ from statistics import mode
 import seaborn as sns
 
 class DataAnalysis:
-    def __init__(self, df, main, others, limits, known_bins=None):
-        self.df = df.copy()
-        self.main = main
-        self.others = others
-        self.limits = limits.copy()
-        self.bins = known_bins or self.created_bins()
-    def statistical_values(self):
-        df = self.df.copy()
+    def __init__(self, df=None, main=None, others=None, limits=None, known_bins=None):
+        self.df = df.copy() if df is not None else None
+        self.main = main if main is not None else None
+        self.others = others if others is not None else None
+        self.limits = limits.copy() if limits is not None else None
+        self.known_bins = known_bins if known_bins is not None else {}
+
+    def statistical_values(self, df):
         df['Tid'] = pd.to_datetime(df['Tid'], errors='coerce')
 
         # Calculate the average, median and standard deviation for each column
@@ -85,10 +47,9 @@ class DataAnalysis:
         print(f"Median for hver sesong er:\n{(df.groupby('Sesong').median(numeric_only=True)).T.round(2)}")
         print(f"Standardavviket for hver sesong er:\n{(df.groupby('Sesong').std(numeric_only=True)).T.round(2)}")
 
-    def drydays(self, limit = 12, format = "print"):
+    def drydays(self, df, limit = 12, format = "print"):
         count = 0
         no_rain_days, dry_periods=[], []
-        df = self.df.copy()
 
         #Calculates the dataframe with dates and length of the period
         if format != "print":
@@ -109,7 +70,7 @@ class DataAnalysis:
         
         #Prints the length of the periods, the mode and the limit
         else: 
-            for rain in range(len(df)-1):
+            for i in range(len(df)-1):
                 if df["Nedbør"][i] <= 0:
                     count += 1
                 else:
@@ -119,10 +80,9 @@ class DataAnalysis:
             print(f"Antall dager uten nedbør etter en annen: {no_rain_days}")
             print(f"Typetall for antall dager uten nedbør sammenhengende: {mode(no_rain_days)}\nMinste antall dager er {limit}")
 
-    def snowdays(self, limit = 5, format="print"):
+    def snowdays(self, df, limit = 5, format="print"):
         count = 0
         snowdays,snow_periods = [], []
-        df = self.df.copy()
         
         #Calculates the dataframe with dates and length of the period
         if format != "print":
@@ -154,23 +114,24 @@ class DataAnalysis:
             print(f"Antall dager med snø etter en annen: {snowdays}")
             print(f"Typetall for antall dager med snø sammenhengende: {mode(snowdays)}\nMinste antall dager er {limit}")
 
-    def scatterplot(self):
-        for column in self.others:
+    def scatterplot(self, df, main, others):
+        for column in others:
             plt.figure(figsize=(6, 3))
-            plt.scatter(self.df[self.main], self.df[column], color='skyblue', edgecolor='black')
-            plt.title(f'Sammenheng mellom {self.main.lower()} og {column.lower()}')
-            plt.xlabel(f'{self.main} (°C)')
+            plt.scatter(df[main], df[column], color='skyblue', edgecolor='black')
+            plt.title(f'Sammenheng mellom {main.lower()} og {column.lower()}')
+            plt.xlabel(f'{main} (°C)')
             plt.ylabel(f'{column} (mm)')
             plt.grid(True)
             plt.show()
 
-    def years_max(self):
-        df = self.df.copy()
+    def years_max(self, df):
+        df = df.copy()
         df["Tid"] = pd.to_datetime(df["Tid"])
         df["Tid"] = df["Tid"].dt.year
         numeric_columns = df.select_dtypes(include='number').columns
         
         # Takes the minimum values of mintemp, and the maximum value of everything else except middeltemp (per year). 
+        
         agg_funcs = {}                                  # ChatGPT assisted with buildt-in pandas functions
         for col in numeric_columns:
             if col == "Mintemp":
@@ -180,38 +141,41 @@ class DataAnalysis:
 
         return df.groupby("Tid").agg(agg_funcs)
 
-    def years_severity(self):
-        self.df["Tid"] = pd.to_datetime(self.df["Tid"])
-        numeric_columns = self.df.select_dtypes(include='number').columns
+    def years_severity(self, df, limits):
+        df["Tid"] = pd.to_datetime(df["Tid"])
+        numeric_columns = df.select_dtypes(include='number').columns
 
-        # Automatically supplement missing boundaries (50% level)
+        # Automatically supplement missing boundaries (25% (5/20) and 50% (5/10) highest level)
         agg_funcs = {}
         for col in numeric_columns:
-            if col not in self.limits:
+            if col not in limits:
                 if col == "Mintemp":
-                    self.limits[col] = ((self.df[col].min() - self.df[col].max()) / 20) * 5
-                elif col != "Middeltemp" and col != "Tid":
-                    self.limits[col] = ((self.df[col].max() - self.df[col].min()) / 10) * 5
+                    limits[col] = ((df[col].min() - df[col].max()) / 20) * 5
+                elif col != "Tid":
+                    limits[col] = ((df[col].max() - df[col].min()) / 10) * 5
 
         # Only colums who exist in df
-        gyldige_kolonner = [col for col in self.limits if col in self.df.columns]
+        valid_columns = [col for col in limits if col in df.columns]
 
-        # Count occurrences above danger limit per year 
+        # Count occurrences above danger limit per year . 
         results = {}
-        for col in gyldige_kolonner:
+        for col in valid_columns:
             if col == "Mintemp":
-                mask = self.df[col] <= self.limits[col]
+                mask = df[col] <= limits[col]
             else:
-                mask = self.df[col] >= self.limits[col]
+                mask = df[col] >= limits[col]
             
-            år = self.df.loc[mask, "Tid"].dt.year
-            results[col] = år.value_counts()
-            df_years_severity = pd.DataFrame(results).fillna(0).astype(int).sort_index()
-        return df_years_severity
-    
-    def df_hist(self, df):
+            years = df.loc[mask, "Tid"].dt.year
+            results[col] = years.value_counts()
+            df_years_severity = pd.DataFrame(results).fillna(0).astype(int).sort_index() 
+        
+        df_years_severity = df_years_severity.reset_index() # ChatGPT assisted with buildt-in pandas functions
 
-        columns_to_plot = self.df.select_dtypes(include='number').columns.tolist()
+        return df_years_severity, limits
+    
+    def df_hist(self, df, known_bins):
+
+        columns_to_plot = df.select_dtypes(include='number').columns.tolist()
         ncols = 2
         nrows = math.ceil(len(columns_to_plot) / ncols) # Lowest int with math.ceil()
 
@@ -221,8 +185,8 @@ class DataAnalysis:
         for i, column in enumerate(columns_to_plot):
             ax = axes[i]
 
-            if column in self.bins:
-                bin_def = self.bins[column]
+            if column in known_bins:
+                bin_def = known_bins[column]
                 data = df[column]
 
                 labels = [label for label, _, _ in bin_def] # "_" indicates that this variable is not needed

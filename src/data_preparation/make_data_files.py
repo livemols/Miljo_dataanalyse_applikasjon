@@ -1,3 +1,6 @@
+# This file make the class MakeDataFiles for data_cleaning.ipynb
+# This file has used ChatGPT (OpenAI) for troubleshooting and explanation of error codes.
+
 import pandas as pd
 import numpy as np
 import sys
