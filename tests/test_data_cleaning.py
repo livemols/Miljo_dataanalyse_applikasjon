@@ -1,4 +1,5 @@
 # This file is a unittest for functions and classe(s) related to data cleaning
+
 # This file has used ChatGPT (OpenAI) for troubleshooting and explanation of error codes.
 
 import sys
@@ -11,7 +12,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../s
 
 class test_behandlet_data(unittest.TestCase):
 
-    # Creates the test list with one duplicate, np.nan and outliars
+    # Creates the test list with one duplicate, np.nan and outliers
     def setUp(self):
         self.df = pd.DataFrame({
             "Navn": ["Oslo","Oslo","Oslo","Oslo"],

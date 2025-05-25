@@ -105,7 +105,7 @@ class test_data_analysis(unittest.TestCase):
         self.assertIn("Nedbør", updated_limits, "Nye grenser ble ikke opprettet for kategorier uten gitt grense")
         self.assertEqual(updated_limits["Nedbør"], 2.5, "Ikke riktig beregnet grense")
 
-        #ChatGpt helped debugging an error in this logic and assisted with translating own logic to code
+        #ChatGPT helped debugging an error in this logic and assisted with translating own logic to code
         result_df = result_df.set_index("Tid")
         self.assertEqual(result_df.loc[2023, "Mintemp"], 1, "Teller ikke overskridelse av grense")
 
