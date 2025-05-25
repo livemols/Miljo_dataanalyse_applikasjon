@@ -4,8 +4,19 @@ Denne mappen inneholder flere notebooks som er kategorisert etter stegene inspir
 
 ***
 
-Riktig rekkefølge å lese notebooksene blir:
+#### Riktig rekkefølge å lese notebooksene blir:
 
-For del 1 av oppgaven - data_understanding og data_cleaning. 
+##### For del 1 av oppgaven: 
+Denne delen setter fokus på rensing og forberedelse av data. Data_understanding handler om å forstå rådata, mens data_cleaning renser våre datasetter.
 
-For del 2 av oppgaven - data_analysis, data_visual, predictive_analysis og refleksjonsnotat. 
+1. *[data_understanding](./data_understanding.ipynb)*
+2. *[data_cleaning](./data_cleaning.ipynb)*
+
+##### For del 2 av oppgaven: 
+Del 2 handler om analysering, visualisering, og prediktering av våre data, i tillegg til refleksjonsnotat. 
+1. *[data_analysis](./data_analysis.ipynb)*
+2. *[data_visual](./data_visual.ipynb)*
+3. *[predictive_analysis](./predictive_analysis.ipynb)*
+4. *[Refleksjonsnotat](./Refleksjonsnotat.ipynb)*
+
+
