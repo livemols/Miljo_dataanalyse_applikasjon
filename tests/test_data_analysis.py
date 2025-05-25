@@ -10,13 +10,22 @@ import datetime as datetime
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
+from modelling.data_analysis import DataAnalysis
+
 class test_data_analysis(unittest.TestCase):
     def setUp(self):
+        datoer = np.array(["2020-02-02", "2020-03-02", "2021-05-02", 
+                           "2021-07-15", "2022-08-02", "2022-09-02", 
+                           "2023-02-01", "2023-10-03", "2024-05-01", 
+                           "2024-09-12", "2025-02-01", "2025-03-27", 
+                           "2026-11-04", "2026-11-05"])
         self.df = pd.DataFrame({
-            "Snø": [0.3,0.5,0.5,0,2,3,0,0,0.5,0.5,0.4,0,1,0], #(3-2-3)
-            "Nedbør": [0,1,1,2,4,0,1,1,1,5,0,1,3,0], #(4-4-2)
+            "Tid": datoer,
+            "Snø": [0.3, 0.5, 0.5, 0, 2, 3, 0, 0, 0.5, 0.5, 0.4, 0, 1, 0],
+            "Nedbør": [0, 1, 1, 2, 4, 0, 1, 1, 1, 5, 0, 1, 3, 0],
+            "Mintemp": [-5, -10, -7, -12, -3, -6, -8, -11, -4, -9, -10, -7, -6, -5]
         })
-
+        self.da = DataAnalysis()
 
     def test_season(self):
         def season(dato):
@@ -80,6 +89,30 @@ class test_data_analysis(unittest.TestCase):
             return snowdays, mode(snowdays)
 
         self.assertEqual(snowdays(df),([3, 2, 3], 3))
+    
+    def test_years_max(self):
+        result = self.da.years_max(self.df)
+        self.assertEqual(result.loc[2020, "Mintemp"], -10.0, "Gir ikke min-verdi for Mintemp") 
+        self.assertEqual(result.loc[2020, "Snø"], 0.5, "Gir ikke max-verdi") 
+
+    def test_years_severity(self):
+        limits = {"Mintemp": -9, "Snø": 25}
+        result_df, updated_limits = self.da.years_severity(self.df, limits)
+
+        self.assertLessEqual(updated_limits["Mintemp"], -9.0, "Beholdt ikke gitt grense")
+        self.assertIn("Nedbør", updated_limits, "Nye grenser ble ikke opprettet for kategorier uten gitt grense")
+        self.assertEqual(updated_limits["Nedbør"], 2.5, "Ikke riktig beregnet grense")
+
+        # Hvis indeksen er datetime eller string, gjør om til årstall som int
+        if not pd.api.types.is_integer_dtype(result_df.index):
+            result_df.index = result_df.index.year if hasattr(result_df.index, 'year') else result_df.index.astype(str).str[:4].astype(int)
+
+        # Sorter indeksen igjen for å holde orden
+        result_df = result_df.set_index("Tid")
+
+        # Så kan du trygt gjøre testen:
+        self.assertEqual(result_df.loc[2023, "Mintemp"], 1, "Teller ikke overskridelse av grense")
+
 
 
 
